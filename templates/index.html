@@ -433,7 +433,7 @@
   function startSpam() {
     if (running) return;
     const uid = document.getElementById('uid-input').value.trim();
-    if (!uid) { alert('Target UID daon!'); return; }
+    if (!uid) { alert('Target UID MUST BE FILLED!'); return; }
     if (!/^\d+$/.test(uid)) { alert('Target UID harus angka!'); return; }
 
     running = true;
