@@ -304,6 +304,81 @@
       font-size: 13px;
     }
 
+    /* ── LOADING OVERLAY ── */
+    #loader {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: radial-gradient(ellipse at 50% 40%, #12122a 0%, var(--bg) 70%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 26px;
+      transition: opacity .6s ease, visibility .6s ease;
+    }
+
+    #loader.hidden {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .loader-logo {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(26px, 6vw, 46px);
+      font-weight: 900;
+      letter-spacing: 6px;
+      text-transform: uppercase;
+      background: linear-gradient(90deg, #00ff88, #00ccff, #00ff88);
+      background-size: 200%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: shimmer 2s linear infinite;
+    }
+
+    .loader-ring {
+      width: 68px;
+      height: 68px;
+      border-radius: 50%;
+      border: 3px solid rgba(0,255,136,.12);
+      border-top-color: var(--green);
+      border-right-color: #00ccff;
+      animation: spin .8s linear infinite;
+      box-shadow: 0 0 22px rgba(0,255,136,.35);
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .loader-bar-wrap {
+      width: min(260px, 70vw);
+      height: 4px;
+      background: #10102a;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .loader-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #00ff88, #00ccff);
+      box-shadow: 0 0 10px rgba(0,255,136,.6);
+      animation: loadfill 1.6s ease-in-out forwards;
+    }
+
+    @keyframes loadfill {
+      0%   { width: 0%; }
+      60%  { width: 75%; }
+      100% { width: 100%; }
+    }
+
+    .loader-text {
+      font-size: 11px;
+      letter-spacing: 5px;
+      color: var(--muted);
+      text-transform: uppercase;
+      animation: pulse 1.2s ease-in-out infinite;
+    }
+
     /* ── FOOTER ── */
     footer {
       font-size: 11px;
@@ -315,6 +390,14 @@
   </style>
 </head>
 <body>
+
+<!-- LOADING OVERLAY -->
+<div id="loader">
+  <div class="loader-logo">BLINX SPAM</div>
+  <div class="loader-ring"></div>
+  <div class="loader-bar-wrap"><div class="loader-bar"></div></div>
+  <div class="loader-text">Initializing Engine...</div>
+</div>
 
 <header>
   <div class="logo">BLINX SPAM</div>
@@ -381,6 +464,14 @@
   const totalAccs = {{ total }};
   let es = null;
   let running = false;
+
+  // Hide loading overlay once page is ready
+  window.addEventListener('load', () => {
+    setTimeout(() => {
+      const loader = document.getElementById('loader');
+      if (loader) loader.classList.add('hidden');
+    }, 1700);
+  });
 
   function ts() {
     const d = new Date();
