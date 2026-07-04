@@ -29,6 +29,110 @@
       display: flex;
       flex-direction: column;
       align-items: center;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* ── ANIMATED BACKGROUND ── */
+    .bg-fx {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .bg-fx .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(70px);
+      opacity: .35;
+    }
+
+    .orb-1 {
+      width: 380px; height: 380px;
+      background: radial-gradient(circle, #00ff88, transparent 70%);
+      top: -80px; left: -60px;
+      animation: float1 18s ease-in-out infinite;
+    }
+
+    .orb-2 {
+      width: 320px; height: 320px;
+      background: radial-gradient(circle, #00ccff, transparent 70%);
+      bottom: -60px; right: -40px;
+      animation: float2 22s ease-in-out infinite;
+    }
+
+    .orb-3 {
+      width: 260px; height: 260px;
+      background: radial-gradient(circle, #7a5cff, transparent 70%);
+      top: 45%; left: 55%;
+      animation: float3 26s ease-in-out infinite;
+    }
+
+    @keyframes float1 {
+      0%,100% { transform: translate(0,0) scale(1); }
+      50%     { transform: translate(60px, 40px) scale(1.15); }
+    }
+    @keyframes float2 {
+      0%,100% { transform: translate(0,0) scale(1); }
+      50%     { transform: translate(-70px, -50px) scale(1.2); }
+    }
+    @keyframes float3 {
+      0%,100% { transform: translate(0,0) scale(1); opacity:.25; }
+      50%     { transform: translate(-50px, 60px) scale(.85); opacity:.4; }
+    }
+
+    /* moving grid */
+    .bg-fx .grid {
+      position: absolute;
+      inset: -50%;
+      background-image:
+        linear-gradient(rgba(0,255,136,.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,255,136,.05) 1px, transparent 1px);
+      background-size: 44px 44px;
+      animation: gridmove 20s linear infinite;
+    }
+
+    @keyframes gridmove {
+      0%   { transform: translate(0,0); }
+      100% { transform: translate(44px,44px); }
+    }
+
+    /* scanline sweeping down */
+    .bg-fx .scanline {
+      position: absolute;
+      left: 0; right: 0; height: 140px;
+      background: linear-gradient(180deg, transparent, rgba(0,255,136,.06), transparent);
+      animation: scan 7s linear infinite;
+    }
+
+    @keyframes scan {
+      0%   { top: -140px; }
+      100% { top: 100%; }
+    }
+
+    /* ── ENTRANCE ANIMATIONS ── */
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .reveal { opacity: 0; animation: rise .7s ease forwards; }
+    .reveal.d1 { animation-delay: .05s; }
+    .reveal.d2 { animation-delay: .18s; }
+    .reveal.d3 { animation-delay: .31s; }
+    .reveal.d4 { animation-delay: .44s; }
+
+    /* subtle idle float on stat cards */
+    .stats-bar .stat-card { animation: cardfloat 5s ease-in-out infinite; }
+    .stats-bar .stat-card:nth-child(2) { animation-delay: .6s; }
+    .stats-bar .stat-card:nth-child(3) { animation-delay: 1.2s; }
+    .stats-bar .stat-card:nth-child(4) { animation-delay: 1.8s; }
+
+    @keyframes cardfloat {
+      0%,100% { transform: translateY(0); }
+      50%     { transform: translateY(-5px); }
     }
 
     /* ── HEADER ── */
@@ -399,7 +503,16 @@
   <div class="loader-text">Initializing Engine...</div>
 </div>
 
-<header>
+<!-- ANIMATED BACKGROUND -->
+<div class="bg-fx">
+  <div class="grid"></div>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+  <div class="scanline"></div>
+</div>
+
+<header class="reveal d1">
   <div class="logo">BLINX SPAM</div>
   <div class="subtitle">Friend Request Spammer &bull; Async Engine</div>
 </header>
@@ -407,7 +520,7 @@
 <main>
 
   <!-- STATS -->
-  <div class="stats-bar">
+  <div class="stats-bar reveal d2">
     <div class="stat-card">
       <div class="val val-total" id="s-total">{{ total }}</div>
       <div class="lbl">Total Accs</div>
@@ -427,7 +540,7 @@
   </div>
 
   <!-- FORM -->
-  <div class="form-panel">
+  <div class="form-panel reveal d3">
     <label>Target Friend UID</label>
     <div class="input-row">
       <input id="uid-input" type="text" inputmode="numeric" pattern="[0-9]*" placeholder="Enter Target UID..."/>
@@ -444,7 +557,7 @@
   </div>
 
   <!-- CONSOLE -->
-  <div class="console-wrap">
+  <div class="console-wrap reveal d4">
     <div class="console-header">
       <div class="dot dot-r"></div>
       <div class="dot dot-y"></div>
