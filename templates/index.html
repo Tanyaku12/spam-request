@@ -347,7 +347,7 @@
   <div class="form-panel">
     <label>Target Friend UID</label>
     <div class="input-row">
-      <input id="uid-input" type="text" placeholder="Enter Target UID..."/>
+      <input id="uid-input" type="text" inputmode="numeric" pattern="[0-9]*" placeholder="Enter Target UID..."/>
       <button class="btn-spam" id="btn-start" onclick="startSpam()">SPAM</button>
       <button class="btn-clear" onclick="clearConsole()">CLEAR</button>
     </div>
@@ -434,6 +434,7 @@
     if (running) return;
     const uid = document.getElementById('uid-input').value.trim();
     if (!uid) { alert('Target UID daon!'); return; }
+    if (!/^\d+$/.test(uid)) { alert('Target UID harus angka!'); return; }
 
     running = true;
     document.getElementById('btn-start').disabled = true;
@@ -488,6 +489,11 @@
 
   document.getElementById('uid-input').addEventListener('keydown', (e) => {
     if (e.key === 'Enter') startSpam();
+  });
+
+  // Only allow digits: strip any non-numeric characters on input/paste
+  document.getElementById('uid-input').addEventListener('input', (e) => {
+    e.target.value = e.target.value.replace(/\D/g, '');
   });
 </script>
 </body>

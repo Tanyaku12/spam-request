@@ -67,6 +67,8 @@ def stream():
     target_uid = request.args.get("uid", "").strip()
     if not target_uid:
         return "No UID", 400
+    if not target_uid.isdigit():
+        return "UID must be numeric", 400
 
     accounts = load_accounts()
     q = queue.Queue()
